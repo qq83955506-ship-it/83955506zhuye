@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>李楠的个人主页</title>
+<link rel="shortcut icon" href="assets/favicon.ico">
+<style>
+:root{
+  --body-color:#ecf0f3; --main-color:#fff; --shadow-color:#e6e6eb;
+  --text-color:#424242; --other-color:#eee; --icon-color:invert(0%);
+  --accent:#2ecc71;
+}
+[theme='dark']{
+  --body-color:#343434; --main-color:#484848; --shadow-color:#303030;
+  --text-color:#ccc; --other-color:#aaa; --icon-color:invert(90%);
+  --accent:#2ecc71;
+}
+*{margin:0;padding:0;border-radius:8px;box-sizing:border-box;font-family:'GenSenRounded','PingFang SC','Microsoft YaHei',sans-serif;transition:background-color .8s ease,box-shadow .8s ease,border .8s ease;line-height:1.3}
+a{color:var(--text-color);text-decoration:none;-webkit-tap-highlight-color:rgba(255,255,255,0);transition:all .3s ease}
+li{list-style:none}
+button{font-family:inherit;border:none;cursor:pointer}
+input,textarea,select{font-family:inherit;border:none;outline:none;background:transparent;color:var(--text-color)}
+body{min-height:100vh;display:flex;justify-content:center;align-items:center;flex-direction:column;background-color:var(--body-color);padding:20px 0}
+@font-face{font-family:'GenSenRounded';src:url('assets/GenSenRounded-R.woff2')}
+
+/* ===== 前台 ===== */
+#stage{display:flex;flex-direction:column;align-items:center}
+nav{width:350px;height:50px;max-width:85%;background-color:var(--main-color);margin-bottom:15px;box-shadow:1px 1px 1px 1px var(--shadow-color);display:flex;justify-content:space-evenly;align-items:center}
+nav a{font-size:large;padding:2px 6px}
+nav img{width:22px;filter:var(--icon-color);cursor:pointer}
+.active{transform:scale(1.1);color:var(--accent)}
+main{width:350px;height:440px;max-width:85%;margin-bottom:50px;position:relative;background-color:var(--main-color);box-shadow:1px 1px 1px 1px var(--shadow-color);scroll-snap-type:x mandatory;display:flex;overflow:auto}
+main::-webkit-scrollbar,#site::-webkit-scrollbar{display:none}
+section{width:100%;padding:15px;display:flex;flex-shrink:0;flex-direction:column;align-items:center;scroll-snap-align:center;scroll-snap-stop:always;overflow:auto}
+#bg{width:100%;height:50%;background-color:var(--body-color);object-fit:cover;border-radius:8px}
+.avatar{width:90px;height:90px;border-radius:50%;position:absolute;top:42%;left:50%;transform:translateX(-50%);object-fit:cover;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.info{width:100%;flex-grow:1;display:flex;flex-direction:column;justify-content:center;align-items:center;color:var(--text-color);padding-top:30px}
+.info h2{font-size:22px;margin-bottom:4px}
+.info h4{font-size:13px;font-weight:400;color:#aaa}
+#link{width:100%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;padding:8px 4px 0}
+#link a{display:flex;align-items:center}
+#link img{width:30px;height:30px;object-fit:contain;filter:var(--icon-color)}
+.item{width:100%;height:100%;padding:10px;box-shadow:inset 0 0 2px 3px var(--shadow-color);color:var(--text-color);overflow:auto}
+.item h3{font-size:15px;margin-bottom:8px;color:var(--text-color)}
+.item .rich{font-size:14px}
+#project{height:auto;display:flex;justify-content:space-between;align-items:center;margin-top:15px}
+#line{height:100%;padding-left:10px;scroll-snap-type:y mandatory;overflow-y:scroll;width:100%}
+#line::-webkit-scrollbar{width:5px}
+#line::-webkit-scrollbar-track{border-radius:8px;background-color:var(--body-color)}
+#line::-webkit-scrollbar-thumb{border-radius:8px;background-color:#ccc}
+#line li{position:relative;padding:15px 0 0 15px;border-left:3px solid var(--other-color);border-radius:0;scroll-snap-align:end;color:#aaa;font-size:14px}
+#line li:first-child{color:var(--accent);font-weight:bolder}
+.focus{width:15px;height:15px;border-radius:22px;background-color:var(--other-color);border:3px solid var(--main-color);position:absolute;left:-9px;top:50%;transform:translateY(-50%)}
+#line li:first-child .focus{background-color:var(--accent);animation:focus 1.8s ease infinite}
+@keyframes focus{0%{box-shadow:0 0 0 0}50%{box-shadow:0 0 0 3px #9ef9a1}100%{box-shadow:0 0 0 0}}
+#site{width:100%;overflow:auto}
+#site li{height:60px;padding:10px;cursor:pointer;line-height:40px;margin-bottom:15px;position:relative;background-image:repeating-linear-gradient(-45deg,var(--body-color),1.125rem,transparent 1.125rem,transparent 2.25rem);transition:all .2s ease-in;overflow:hidden}
+#site li:last-child{margin-bottom:0}
+#site li:hover{line-height:20px}
+#site li a{display:block;height:100%;width:100%}
+.status{position:absolute;right:10px;top:5px;font-size:12px}
+footer{width:100%;height:40px;line-height:40px;text-align:center;background-color:var(--main-color);box-shadow:-1px -1px 1px var(--shadow-color);font-size:13px;position:fixed;bottom:0;left:0;z-index:5}
+footer a{color:#aaa;margin-left:10px;font-size:12px}
+#china{width:70px;position:fixed;right:10px;bottom:40px;z-index:5;pointer-events:none;opacity:.9}
+#toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.78);color:#fff;padding:8px 16px;border-radius:20px;font-size:13px;z-index:99;opacity:0;pointer-events:none;transition:opacity .3s;max-width:86%;text-align:center}
+#toast.show{opacity:1}
+
+/* ===== 后台 ===== */
+#admin{display:none;width:350px;max-width:92%;flex-direction:column;gap:10px;margin-bottom:60px}
+body.admin-open #stage{display:none}
+body.admin-open #admin{display:flex}
+body.admin-open footer{position:static}
+.admin-card{background:var(--main-color);box-shadow:1px 1px 1px 1px var(--shadow-color);padding:14px;color:var(--text-color)}
+.admin-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.admin-head h2{font-size:17px}
+.admin-head .btns{display:flex;gap:8px}
+.btn{padding:5px 14px;border-radius:8px;background:var(--accent);color:#fff;font-size:13px}
+.btn.ghost{background:var(--other-color);color:var(--text-color)}
+.btn.danger{background:tomato}
+.btn.sm{font-size:12px;padding:3px 10px}
+.admin-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.admin-tabs a{font-size:13px;padding:4px 10px;border-radius:8px;background:var(--other-color);color:var(--text-color)}
+.admin-tabs a.on{background:var(--accent);color:#fff}
+.form-item{margin-bottom:10px}
+.form-item label{display:block;font-size:12px;color:#aaa;margin-bottom:4px}
+.form-item input,.form-item textarea,.form-item select{width:100%;border:1px solid var(--shadow-color);border-radius:8px;padding:7px 10px;font-size:13px;background:var(--main-color)}
+.form-item textarea{min-height:70px;resize:vertical;line-height:1.6}
+.form-item .rich-input{min-height:140px;font-family:monospace}
+.login-box{text-align:center;padding:26px 18px}
+.login-box h2{margin-bottom:18px;font-size:18px}
+.login-box .form-item input{padding:10px}
+.login-tip{font-size:12px;color:#aaa;margin-top:10px}
+.list-row{display:flex;justify-content:space-between;align-items:center;padding:8px 6px;border-bottom:1px solid var(--shadow-color);font-size:13px;gap:8px}
+.list-row .info{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.list-row .info b{font-size:13px}
+.list-row .info span{color:#aaa;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.list-row .ops{display:flex;gap:6px;flex-shrink:0}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:var(--other-color);border-radius:8px;padding:12px;text-align:center}
+.stat b{display:block;font-size:20px;color:var(--accent)}
+.stat span{font-size:12px;color:#aaa}
+.empty{text-align:center;color:#aaa;font-size:13px;padding:16px 0}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:60;padding:16px}
+.modal.show{display:flex}
+.modal-card{background:var(--main-color);border-radius:12px;padding:16px;width:100%;max-width:340px;max-height:86vh;overflow:auto;color:var(--text-color)}
+.modal-card h3{font-size:15px;margin-bottom:12px}
+.modal-card .form-item input,.modal-card .form-item textarea{border-color:var(--shadow-color)}
+.modal-btns{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+@media (max-width:420px){
+  nav,main{max-width:92%}
+  .stat-grid{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+<!-- ===== 前台 ===== -->
+<div id="stage">
+  <nav>
+    <a href="#home" id="home" class="active">首页</a>
+    <a href="#about" id="about">关于</a>
+    <a href="#timeline" id="timeline">历程</a>
+    <a href="#website" id="website">站点</a>
+    <img src="assets/play.svg" id="musicBtn" alt="music">
+    <img src="assets/sun.svg" id="darkMode" alt="darkMode">
+  </nav>
+  <main id="mainBox" class="scrollbar">
+    <section title="home">
+      <img src="" id="bg" alt="背景">
+      <img src="" class="avatar" id="avatar" alt="avatar">
+      <div class="info">
+        <h2 id="t1"></h2>
+        <h4 id="t2"></h4>
+        <div id="link"></div>
+      </div>
+    </section>
+    <section title="about">
+      <div class="item">
+        <div class="rich" id="infor"></div>
+      </div>
+      <div id="project" class="item"><div class="rich" id="inforxf"></div></div>
+    </section>
+    <section title="timeline">
+      <div class="item"><ul id="line"></ul></div>
+    </section>
+    <section title="website"><ul id="site"></ul></section>
+  </main>
+</div>
+<footer><span id="copyright"></span><a href="#/admin">管理</a></footer>
+<img src="assets/China.svg" id="china" alt="">
+<audio preload="none" loop id="audio"></audio>
+<div id="toast"></div>
+
+<!-- ===== 后台 ===== -->
+<div id="admin">
+  <div class="admin-card" id="loginView">
+    <div class="login-box">
+      <h2>管理后台</h2>
+      <div class="form-item"><input type="text" id="loginUser" placeholder="账号" value="admin"></div>
+      <div class="form-item"><input type="password" id="loginPass" placeholder="密码"></div>
+      <button class="btn" id="loginBtn" style="width:100%;padding:10px">登 录</button>
+      <div class="login-tip">提示：默认账号 admin，密码为原站后台密码，登录后请尽快修改</div>
+    </div>
+  </div>
+  <div class="admin-card" id="adminView" style="display:none">
+    <div class="admin-head">
+      <h2>后台管理</h2>
+      <div class="btns"><button class="btn ghost sm" id="backHome">返回主页</button><button class="btn danger sm" id="logoutBtn">退出</button></div>
+    </div>
+    <div class="admin-tabs" id="adminTabs">
+      <a href="#/admin/overview" data-mod="overview">总览</a>
+      <a href="#/admin/seat" data-mod="seat">站点设置</a>
+      <a href="#/admin/content" data-mod="content">内容设置</a>
+      <a href="#/admin/zd" data-mod="zd">站点管理</a>
+      <a href="#/admin/lc" data-mod="lc">历程管理</a>
+      <a href="#/admin/svg" data-mod="svg">图标管理</a>
+      <a href="#/admin/account" data-mod="account">账号</a>
+    </div>
+    <div id="adminBody"></div>
+  </div>
+</div>
+<script>
+/* ===== 数据层 ===== */
+const WORKER_URL='https://PASTE-YOUR-WORKER-URL.workers.dev';
+const API_KEY='change-me-please';
+const api=p=>WORKER_URL.replace(/\/$/,'')+'/api'+p;
+const LS_BACKUP='ln_cloud_backup';
+let offline=false;
+const SEED={"config":{"title":"李楠的个人主页","name":"李楠的个人主页","keywords":"","description":"","ico":"assets/favicon.ico","logo":"https://q1.qlogo.cn/g?b=qq&nk=83955506&s=640","tag":"网瘾\r\n小学生\r\n大一\r\n网页\r\nlinux\r\n跑者\r\n前端\r\n骑行                                                                                                                                          ","infor":"<div style=\"font-family: 'Inter', sans-serif; color: #1e293b; line-height: 1.9; padding: 4px 0;\">\r\n\r\n  <!-- 头部：名字 + 身份标签 -->\r\n  <div style=\"display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px;\">\r\n    <span style=\"font-size: 1.5rem; font-weight: 700; background: linear-gradient(135deg, #2563eb, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;\">李楠<\/span>\r\n <p>\r\n    <span style=\"background: #f1f5f9; color: #475569; padding: 2px 14px; border-radius: 20px; font-size: 0.85rem;\">🧑‍💻 业余开发者<\/span>\r\n    <span style=\"background: #fef3c7; color: #92400e; padding: 2px 14px; border-radius: 20px; font-size: 0.85rem; border: 1px solid #fde68a;\">👨‍👩‍👧 已婚有娃<\/span>\r\n  <\/div><\/p>\r\n\r\n  <!-- 第一段：成长历程 -->\r\n  <p style=\"font-size: 1rem; margin: 0 0 10px 0;\">\r\n    <span style=\"font-weight: 600; color: #2563eb;\">▸<\/span> 从初中起就钻进了代码的世界，\r\n    捣鼓过 <span style=\"background: #dbeafe; padding: 0 8px; border-radius: 12px; border: 1px solid #bfdbfe; font-size: 0.9rem;\">QQ卡盟<\/span>\r\n    <span style=\"background: #dbeafe; padding: 0 8px; border-radius: 12px; border: 1px solid #bfdbfe; font-size: 0.9rem;\">博客<\/span>\r\n    <span style=\"background: #dbeafe; padding: 0 8px; border-radius: 12px; border: 1px solid #bfdbfe; font-size: 0.9rem;\">代刷网<\/span>\r\n    <span style=\"background: #dbeafe; padding: 0 8px; border-radius: 12px; border: 1px solid #bfdbfe; font-size: 0.9rem;\">技术教程网<\/span>，\r\n    高中时又上线了 <span style=\"background: #ede9fe; padding: 0 10px; border-radius: 12px; border: 1px solid #ddd6fe; font-size: 0.9rem;\">云免网<\/span>，\r\n    一路折腾，一路热爱。\r\n  <\/p>\r\n\r\n  <!-- 第二段：现在 + 项目标签 -->\r\n  <p style=\"font-size: 1rem; margin: 0 0 10px 0;\">\r\n    <span style=\"font-weight: 600; color: #2563eb;\">▸<\/span> 如今主业是 <span style=\"font-weight: 600; color: #2563eb; background: #eff6ff; padding: 0 10px; border-radius: 6px;\">📦 电商运营<\/span>，\r\n    每天和数据、流量、转化率打交道；\r\n    副业继续 <span style=\"font-weight: 600; color: #7c3aed; background: #f5f3ff; padding: 0 10px; border-radius: 6px;\">🧑‍💻 业余写代码<\/span>，\r\n    享受从零搭建的纯粹快乐。\r\n  <\/p>\r\n\r\n  <!-- 项目标签列表 -->\r\n  <div style=\"display: flex; flex-wrap: wrap; gap: 6px 10px; margin: 10px 0 12px 0; padding: 10px 14px; background: #f8fafc; border-radius: 14px; border: 1px solid #eef2f6;\">\r\n    <span style=\"font-size: 0.8rem; color: #475569; font-weight: 500; width: 100%; margin-bottom: 2px;\">⚡ 折腾过的项目<\/span>\r\n    <span style=\"background: #dbeafe; color: #1e40af; padding: 0 10px; border-radius: 12px; font-size: 0.8rem; border: 1px solid #bfdbfe;\">QQ卡盟<\/span>\r\n    <span style=\"background: #dbeafe; color: #1e40af; padding: 0 10px; border-radius: 12px; font-size: 0.8rem; border: 1px solid #bfdbfe;\">博客<\/span>\r\n    <span style=\"background: #dbeafe; color: #1e40af; padding: 0 10px; border-radius: 12px; font-size: 0.8rem; border: 1px solid #bfdbfe;\">代刷网<\/span>\r\n    <span style=\"background: #dbeafe; color: #1e40af; padding: 0 10px; border-radius: 12px; font-size: 0.8rem; border: 1px solid #bfdbfe;\">教程网<\/span>\r\n    <span style=\"background: #ede9fe; color: #5b21b6; padding: 0 10px; border-radius: 12px; font-size: 0.8rem; border: 1px solid #ddd6fe;\">云免网<\/span>\r\n    <span style=\"background: #fef3c7; color: #92400e; padding: 0 10px; border-radius: 12px; font-size: 0.8rem; border: 1px solid #fde68a;\">个人主页<\/span>\r\n  <\/div>\r\n\r\n\r\n","inforxf":"    <span style=\"font-style: italic; color: #64748b; font-size: 0.95rem;\">“业余，但从不敷衍。”<\/span>\r\n    <span style=\"font-weight: 600; color: #0f172a; font-size: 1.1rem;\">李楠 <small style=\"font-weight: 400; color: #94a3b8; font-size: 0.85rem;\">· 2026<\/small><\/span>\r\n  <\/div>\r\n<\/div>","copyright":"本站已安全运行了<b><strong><script language = \"JavaScript\"type = \"text/javascript\" >var urodz = new Date(\"8/22/2026\");var now = new Date();var ile = now.getTime() - urodz.getTime();var dni = Math.floor(ile / (1000 * 60 * 60 * 24));document.write( + dni)<\/script><\/strong><\/b>天","music":"assets/music.mp3","bj":"assets/bg.jpg","title1":"李楠","title2":"欢迎来到我的小屋","user":"admin","pwd":"83955506"},"iconList":[{"url":"","svg":"assets/icons/1.png","id":16},{"url":"","svg":"assets/icons/2.png","id":17},{"url":"","svg":"assets/icons/3.png","id":18},{"url":"","svg":"assets/icons/4.png","id":19},{"url":"","svg":"https://www.zibll.top/wp-content/uploads/2023/01/vip2-1.gif","id":20},{"url":"","svg":"assets/icons/6.png","id":21},{"url":"","svg":"assets/icons/7.png","id":22},{"url":"","svg":"assets/icons/8.png","id":23},{"url":"","svg":"assets/icons/9.png","id":24},{"url":"","svg":"assets/icons/10.png","id":25},{"url":"","svg":"https://www.zibll.top/wp-content/uploads/2023/01/vip1.gif","id":26}],"lineList":[{"time":"2015-01-06","name":"搭建第一个网站","id":1},{"time":"2026-08-22","name":"个人主页上线","id":7},{"time":"2026-08-22","name":"新年倒计时上线","id":8},{"time":"2026-08-24","name":"情侣纪念日上线","id":9},{"time":"2026-08-24","name":"纪念日-喜庆版上线","id":10},{"time":"2026-08-24","name":"过年氛围感单页上线","id":11}],"siteList":[{"name":"新年倒计时","url":"http://linan.698.dpdns.org/djs","content":"新年倒计时","status":true,"id":1},{"name":"恋爱纪念日","url":"http://linan.698.dpdns.org/ql","content":"关于我的恋爱纪念日","status":true,"id":2},{"name":"纪念日-喜庆版","url":"http://linan.698.dpdns.org/xiqingdjs","content":"","status":true,"id":3},{"name":"过年氛围感单页","url":"http://linan.698.dpdns.org/xiqing/","content":"","status":true,"id":4},{"name":"宝宝排便次数记录","url":"http://linan.698.dpdns.org/paibian","content":"","status":true,"id":5}]};
+let state=JSON.parse(JSON.stringify(SEED));
+
+async function apiFetch(path,opt={}){
+  const headers={'Content-Type':'application/json'};
+  if(opt.method&&opt.method!=='GET')headers['x-api-key']=API_KEY;
+  const ctrl=new AbortController();
+  const timer=setTimeout(()=>ctrl.abort(),6000);
+  try{
+    const r=await fetch(api(path),{...opt,headers,signal:ctrl.signal});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const j=await r.json().catch(()=>({ok:false}));
+    if(j&&j.ok===false)throw new Error('API error');
+    return j;
+  }finally{clearTimeout(timer)}
+}
+async function loadRemote(){
+  try{
+    const j=await apiFetch('/state');
+    if(j&&typeof j.data==='object'&&j.data!==null){state=Object.assign({},SEED,j.data);localStorage.removeItem(LS_BACKUP)}
+    return;
+  }catch(e){}
+  offline=true;
+  try{
+    const b=localStorage.getItem(LS_BACKUP);
+    if(b){const d=JSON.parse(b);if(d&&typeof d==='object')state=Object.assign({},SEED,d)}
+  }catch(e){}
+}
+let saveTimer=null;
+function saveLocal(){try{localStorage.setItem(LS_BACKUP,JSON.stringify(state))}catch(e){}}
+function save(){
+  if(offline){saveLocal();render();return}
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(async()=>{
+    try{await apiFetch('/state',{method:'PUT',body:JSON.stringify(state)});localStorage.removeItem(LS_BACKUP)}
+    catch(e){toast('云端保存失败，已暂存到本机');saveLocal()}
+  },300);
+}
+function toast(msg){
+  const t=document.querySelector('#toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.remove('show'),2600);
+}
+const $=s=>document.querySelector(s);
+
+/* ===== 前台渲染 ===== */
+function render(){
+  const c=state.config||{};
+  document.title=(c.name||c.title||'个人主页');
+  const fav=$('link[rel="shortcut icon"]');if(fav&&c.ico)fav.href=c.ico;
+  const bg=$('#bg');if(c.bj)bg.src=c.bj;
+  const av=$('#avatar');if(c.logo)av.src=c.logo;
+  $('#t1').textContent=c.title1||'';
+  $('#t2').textContent=c.title2||'';
+  $('#infor').innerHTML=c.infor||'';
+  $('#inforxf').innerHTML=c.inforxf||'';
+  $('#copyright').innerHTML=renderCopyright(c.copyright||'');
+  $('#link').innerHTML=(state.iconList||[]).map(x=>x&&x.svg?`<a href="${escAttr(x.url)}" target="_blank" rel="noopener"><img src="${escAttr(x.svg)}" alt="icon" loading="lazy"></a>`:'').join('');
+  $('#line').innerHTML=(state.lineList||[]).slice().sort((a,b)=>(b.id||0)-(a.id||0)).map(x=>`<li><div class="focus"></div><div>${esc(x.time)}</div><div>${esc(x.name)}</div></li>`).join('');
+  $('#site').innerHTML=(state.siteList||[]).map(x=>x&&x.name?`<li><a href="${escAttr(x.url)}" target="_blank" rel="noopener"><span class="status">${x.status?'<span style="color:#2ecc71">200</span>':'<span style="color:tomato">404</span>'}</span><span style="font-size:18px">${esc(x.name)}</span><br><span style="color:#aaa;font-size:12px">${esc(x.content)}</span></a></li>`:'').join('');
+  if(c.music)$('#audio').src=c.music;
+}
+function renderCopyright(html){
+  let days='';
+  const m=html.match(/new Date\(["']([\d/]+)["']\)/);
+  if(m){
+    const start=new Date(m[1]),now=new Date();
+    const d=Math.floor((now-start)/86400000);
+    if(!isNaN(start)&&d>=0)days=String(d);
+  }
+  return html.replace(/<script[\s\S]*?<\/script>/gi,days||'');
+}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function escAttr(s){return String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+
+/* ===== 前台交互（导航/暗色/音乐）===== */
+const dom=document.documentElement;
+const mainBox=$('#mainBox');
+const musicEl=$('#audio');
+let mode=JSON.parse(localStorage.getItem('darkMode'))||false;
+if(mode){$('#darkMode').src='assets/moon.svg';dom.setAttribute('theme','dark')}
+$('#darkMode').addEventListener('click',()=>{
+  mode=!mode;
+  $('#darkMode').src=mode?'assets/moon.svg':'assets/sun.svg';
+  mode?dom.setAttribute('theme','dark'):dom.removeAttribute('theme');
+  localStorage.setItem('darkMode',mode);
+});
+let isPlay=false;
+$('#musicBtn').addEventListener('click',()=>{
+  if(isPlay){musicEl.pause();$('#musicBtn').src='assets/play.svg'}
+  else{musicEl.play().then(()=>{$('#musicBtn').src='assets/pause.svg'}).catch(()=>toast('音乐无法播放，可到后台更换音乐链接'))}
+  isPlay=!isPlay;
+});
+musicEl.addEventListener('pause',()=>{if(!musicEl.ended){$('#musicBtn').src='assets/play.svg';isPlay=false}});
+document.querySelector('nav').addEventListener('click',e=>{
+  const a=e.target.closest('a');
+  if(a&&a.id){
+    e.preventDefault();
+    const sec=document.querySelector(`section[title="${a.id}"]`);
+    if(sec)mainBox.scrollTo({left:sec.offsetLeft,behavior:'smooth'});
+  }
+});
+let navTimer=null;
+mainBox.addEventListener('scroll',e=>{
+  if(navTimer)clearTimeout(navTimer);
+  navTimer=setTimeout(()=>{
+    document.querySelectorAll('section').forEach(sec=>{
+      if(Math.abs(e.target.scrollLeft-sec.offsetLeft)<50){
+        document.querySelectorAll('nav a').forEach(x=>x.classList.remove('active'));
+        const nav=document.querySelector(`nav a[id="${sec.getAttribute('title')}"]`);
+        if(nav)nav.classList.add('active');
+      }
+    });
+  },200);
+});
+
+/* ===== 路由 ===== */
+let adminLogged=sessionStorage.getItem('ln_admin')==='1';
+function route(){
+  const h=location.hash;
+  if(h.startsWith('#/admin')){
+    document.body.classList.add('admin-open');
+    if(!adminLogged){$('#loginView').style.display='';$('#adminView').style.display='none';return}
+    $('#loginView').style.display='none';$('#adminView').style.display='';
+    const mod=(h.split('/')[2]||'overview');
+    document.querySelectorAll('#adminTabs a').forEach(a=>a.classList.toggle('on',a.dataset.mod===mod));
+    renderAdmin(mod);
+  }else{
+    document.body.classList.remove('admin-open');
+    const id=(h||'').replace('#','')||'home';
+    const sec=document.querySelector(`section[title="${id}"]`);
+    if(sec)setTimeout(()=>mainBox.scrollTo({left:sec.offsetLeft,behavior:'auto'}),0);
+  }
+}
+window.addEventListener('hashchange',route);
+$('#backHome').addEventListener('click',()=>location.hash='#home');
+$('#logoutBtn').addEventListener('click',()=>{adminLogged=false;sessionStorage.removeItem('ln_admin');location.hash='#/admin'});
+$('#loginBtn').addEventListener('click',doLogin);
+$('#loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+function doLogin(){
+  const u=$('#loginUser').value.trim(),p=$('#loginPass').value;
+  const c=state.config||{};
+  if(u===c.user&&p===c.pwd){
+    adminLogged=true;sessionStorage.setItem('ln_admin','1');
+    toast('登录成功');route();
+  }else toast('账号或密码错误');
+}
+</script>
+<!-- something todo -->
+<script>
+/* ===== 后台管理 ===== */
+let modalCb=null;
+function modal(title,body,onSave){
+  const m=document.createElement('div');m.className='modal show';m.id='modalBox';
+  m.innerHTML=`<div class="modal-card"><h3>${esc(title)}</h3>${body}<div class="modal-btns"><button class="btn ghost" data-act="cancel">取消</button><button class="btn" data-act="ok">保存</button></div></div>`;
+  modalCb=onSave;
+  m.addEventListener('click',e=>{
+    if(e.target===m||e.target.dataset.act==='cancel'){m.remove();modalCb=null;return}
+    if(e.target.dataset.act==='ok'){if(modalCb)modalCb();m.remove();modalCb=null}
+  });
+  document.body.appendChild(m);
+}
+function field(name,label,val,multi){
+  return `<div class="form-item"><label>${label}</label><${multi?'textarea':'input'} name="${name}" ${multi?'class="rich-input"':''}>${multi?esc(val):''}</${multi?'textarea':'input'}></div>`;
+}
+function fval(name){const el=document.querySelector(`.modal [name="${name}"]`);return el?el.value:''}
+
+function renderAdmin(mod){
+  const b=$('#adminBody');
+  if(mod==='overview'){
+    b.innerHTML=`<div class="stat-grid">
+      <div class="stat"><b>${(state.siteList||[]).length}</b><span>站点</span></div>
+      <div class="stat"><b>${(state.lineList||[]).length}</b><span>历程</span></div>
+      <div class="stat"><b>${(state.iconList||[]).length}</b><span>图标</span></div></div>
+      <div class="form-item" style="margin-top:12px"><div style="font-size:13px;color:#aaa;line-height:1.8">
+      站点数据存储在 Cloudflare KV，保存成功后全站即时生效。若提示“本地模式”，数据仅存本机，联网后恢复云端。<br>
+      首次部署请先到“内容设置”检查背景/音乐链接是否可用。</div></div>`;
+    return;
+  }
+  if(mod==='seat'){
+    const c=state.config||{};
+    b.innerHTML=`<div class="form-item"><label>站点名称 name</label><input id="f_name" value="${escAttr(c.name||'')}"></div>
+    <div class="form-item"><label>副标题 title</label><input id="f_title" value="${escAttr(c.title||'')}"></div>
+    <div class="form-item"><label>关键词 keywords（SEO）</label><input id="f_keywords" value="${escAttr(c.keywords||'')}"></div>
+    <div class="form-item"><label>描述 description（SEO）</label><textarea id="f_description">${esc(c.description||'')}</textarea></div>
+    <div class="form-item"><label>站点图标 ico（URL）</label><input id="f_ico" value="${escAttr(c.ico||'')}"></div>
+    <div class="form-item"><label>头像 logo（URL）</label><input id="f_logo" value="${escAttr(c.logo||'')}"></div>
+    <div class="form-item"><label>页脚版权 copyright（支持 HTML）</label><textarea id="f_copyright">${esc(c.copyright||'')}</textarea></div>
+    <button class="btn" id="saveSeat" style="width:100%">保存站点设置</button>`;
+    $('#saveSeat').addEventListener('click',()=>{
+      const c=state.config;
+      c.name=$('#f_name').value.trim();c.title=$('#f_title').value.trim();
+      c.keywords=$('#f_keywords').value.trim();c.description=$('#f_description').value;
+      c.ico=$('#f_ico').value.trim();c.logo=$('#f_logo').value.trim();c.copyright=$('#f_copyright').value;
+      save();toast('已保存');
+    });
+    return;
+  }
+  if(mod==='content'){
+    const c=state.config||{};
+    b.innerHTML=`<div class="form-item"><label>首页大标题 title1</label><input id="g_title1" value="${escAttr(c.title1||'')}"></div>
+    <div class="form-item"><label>首页副标题 title2</label><input id="g_title2" value="${escAttr(c.title2||'')}"></div>
+    <div class="form-item"><label>标签 tag（可多行）</label><textarea id="g_tag">${esc(c.tag||'')}</textarea></div>
+    <div class="form-item"><label>背景图 bj（URL 或 assets/bg.jpg）</label><input id="g_bj" value="${escAttr(c.bj||'')}"></div>
+    <div class="form-item"><label>背景音乐 music（URL 或 assets/music.mp3）</label><input id="g_music" value="${escAttr(c.music||'')}"></div>
+    <div class="form-item"><label>关于 infor（HTML）</label><textarea id="g_infor" class="rich-input">${esc(c.infor||'')}</textarea></div>
+    <div class="form-item"><label>关于下方 inforxf（HTML）</label><textarea id="g_inforxf" class="rich-input">${esc(c.inforxf||'')}</textarea></div>
+    <button class="btn" id="saveContent" style="width:100%">保存内容设置</button>`;
+    $('#saveContent').addEventListener('click',()=>{
+      const c=state.config;
+      c.title1=$('#g_title1').value.trim();c.title2=$('#g_title2').value.trim();
+      c.tag=$('#g_tag').value;c.bj=$('#g_bj').value.trim();
+      c.music=$('#g_music').value.trim();c.infor=$('#g_infor').value;c.inforxf=$('#g_inforxf').value;
+      save();toast('已保存');
+    });
+    return;
+  }
+  if(mod==='zd'){
+    b.innerHTML=`<button class="btn" id="addZd" style="width:100%;margin-bottom:10px">+ 新增站点</button>
+    <div id="zdList">${(state.siteList||[]).map(x=>`<div class="list-row"><div class="info"><b>${esc(x.name)}</b><span>${esc(x.url)}</span></div><div class="ops"><button class="btn ghost sm" data-edit="${x.id}">编辑</button><button class="btn danger sm" data-del="${x.id}">删除</button></div></div>`).join('')||'<div class="empty">暂无站点</div>'}</div>`;
+    const openEditor=(id)=>{
+      const x=(state.siteList||[]).find(v=>String(v.id)===String(id));
+      const body=`${field('name','站点名称',x?x.name:'',false)}${field('url','链接地址',x?x.url:'',false)}${field('content','描述',x?x.content:'',false)}
+      <div class="form-item"><label>状态</label><select name="status"><option value="true" ${x&&x.status?'selected':''}>200 正常</option><option value="false" ${x&&!x.status?'selected':''}>404 失效</option></select></div>`;
+      modal(x?'编辑站点':'新增站点',body,()=>{
+        const list=state.siteList||[];
+        if(x){const t=list.find(v=>String(v.id)===String(id));t.name=fval('name').trim();t.url=fval('url').trim();t.content=fval('content');t.status=fval('status')==='true'}
+        else{list.push({id:Date.now(),name:fval('name').trim(),url:fval('url').trim(),content:fval('content'),status:fval('status')==='true'})}
+        save();renderAdmin('zd');
+      });
+    };
+    $('#addZd').addEventListener('click',()=>openEditor(null));
+    $('#zdList').addEventListener('click',e=>{
+      const ed=e.target.closest('[data-edit]'),dl=e.target.closest('[data-del]');
+      if(ed)openEditor(ed.dataset.edit);
+      if(dl){
+        modal('删除站点','确定删除该站点？',()=>{
+          state.siteList=(state.siteList||[]).filter(v=>String(v.id)!==String(dl.dataset.del));
+          save();renderAdmin('zd');
+        });
+      }
+    });
+    return;
+  }
+  if(mod==='lc'){
+    b.innerHTML=`<button class="btn" id="addLc" style="width:100%;margin-bottom:10px">+ 新增历程</button>
+    <div id="lcList">${(state.lineList||[]).slice().sort((a,b)=>(b.id||0)-(a.id||0)).map(x=>`<div class="list-row"><div class="info"><b>${esc(x.name)}</b><span>${esc(x.time)}</span></div><div class="ops"><button class="btn ghost sm" data-edit="${x.id}">编辑</button><button class="btn danger sm" data-del="${x.id}">删除</button></div></div>`).join('')||'<div class="empty">暂无历程</div>'}</div>`;
+    const openEditor=(id)=>{
+      const x=(state.lineList||[]).find(v=>String(v.id)===String(id));
+      const body=`${field('time','时间（如 2015-01-06）',x?x.time:'',false)}${field('name','事件名称',x?x.name:'',false)}`;
+      modal(x?'编辑历程':'新增历程',body,()=>{
+        const list=state.lineList||[];
+        if(x){const t=list.find(v=>String(v.id)===String(id));t.time=fval('time').trim();t.name=fval('name').trim()}
+        else{list.push({id:Date.now(),time:fval('time').trim(),name:fval('name').trim()})}
+        save();renderAdmin('lc');
+      });
+    };
+    $('#addLc').addEventListener('click',()=>openEditor(null));
+    $('#lcList').addEventListener('click',e=>{
+      const ed=e.target.closest('[data-edit]'),dl=e.target.closest('[data-del]');
+      if(ed)openEditor(ed.dataset.edit);
+      if(dl)modal('删除历程','确定删除该条历程？',()=>{state.lineList=(state.lineList||[]).filter(v=>String(v.id)!==String(dl.dataset.del));save();renderAdmin('lc')});
+    });
+    return;
+  }
+  if(mod==='svg'){
+    b.innerHTML=`<button class="btn" id="addSvg" style="width:100%;margin-bottom:10px">+ 新增图标</button>
+    <div id="svgList">${(state.iconList||[]).map(x=>`<div class="list-row"><div class="info"><b>${esc(x.svg)}</b><span>${esc(x.url)||'（无链接）'}</span></div><div class="ops"><button class="btn ghost sm" data-edit="${x.id}">编辑</button><button class="btn danger sm" data-del="${x.id}">删除</button></div></div>`).join('')||'<div class="empty">暂无图标</div>'}</div>`;
+    const openEditor=(id)=>{
+      const x=(state.iconList||[]).find(v=>String(v.id)===String(id));
+      const body=`${field('svg','图标地址（URL 或 assets/icons/1.png）',x?x.svg:'',false)}${field('url','跳转链接',x?x.url:'',false)}`;
+      modal(x?'编辑图标':'新增图标',body,()=>{
+        const list=state.iconList||[];
+        if(x){const t=list.find(v=>String(v.id)===String(id));t.svg=fval('svg').trim();t.url=fval('url').trim()}
+        else{list.push({id:Date.now(),svg:fval('svg').trim(),url:fval('url').trim()})}
+        save();renderAdmin('svg');
+      });
+    };
+    $('#addSvg').addEventListener('click',()=>openEditor(null));
+    $('#svgList').addEventListener('click',e=>{
+      const ed=e.target.closest('[data-edit]'),dl=e.target.closest('[data-del]');
+      if(ed)openEditor(ed.dataset.edit);
+      if(dl)modal('删除图标','确定删除该图标？',()=>{state.iconList=(state.iconList||[]).filter(v=>String(v.id)!==String(dl.dataset.del));save();renderAdmin('svg')});
+    });
+    return;
+  }
+  if(mod==='account'){
+    const c=state.config||{};
+    b.innerHTML=`<div class="form-item"><label>当前账号</label><input id="a_user" value="${escAttr(c.user||'')}"></div>
+    <div class="form-item"><label>旧密码</label><input type="password" id="a_old"></div>
+    <div class="form-item"><label>新密码（留空则不修改）</label><input type="password" id="a_new"></div>
+    <button class="btn" id="saveAccount" style="width:100%">保存账号</button>
+    <div style="font-size:12px;color:#aaa;margin-top:10px">提示：修改后请牢记新密码。密码仅用于前台登录后台，写数据接口另有 API_KEY 保护。</div>`;
+    $('#saveAccount').addEventListener('click',()=>{
+      const u=$('#a_user').value.trim(),oldp=$('#a_old').value,newp=$('#a_new').value;
+      if(!u){toast('账号不能为空');return}
+      if(oldp!==c.pwd){toast('旧密码错误');return}
+      c.user=u;if(newp)c.pwd=newp;
+      save();toast('账号已更新');
+    });
+    return;
+  }
+}
+
+/* ===== 启动 ===== */
+window.addEventListener('DOMContentLoaded',async()=>{
+  await loadRemote();
+  render();
+  route();
+  if(offline)toast('云端连接失败，已切换本地模式：数据仅保存在本机，联网后恢复云端');
+});
+</script>
+</body>
+</html>
