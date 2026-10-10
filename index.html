@@ -57,6 +57,9 @@ section{width:100%;padding:15px;display:flex;flex-shrink:0;flex-direction:column
 #site li{height:60px;padding:10px;cursor:pointer;line-height:40px;margin-bottom:15px;position:relative;background-image:repeating-linear-gradient(-45deg,var(--body-color),1.125rem,transparent 1.125rem,transparent 2.25rem);transition:all .2s ease-in;overflow:hidden}
 #site li:last-child{margin-bottom:0}
 #site li:hover{line-height:20px}
+#site li.site-more{height:44px;line-height:44px;background:var(--other-color);text-align:center;font-size:14px;color:var(--text-color);background-image:none;cursor:pointer}
+#site li.site-more:hover{line-height:44px}
+#site li.site-more:active{opacity:.7}
 #site li a{display:block;height:100%;width:100%}
 .status{position:absolute;right:10px;top:5px;font-size:12px}
 footer{width:100%;height:40px;line-height:40px;text-align:center;background-color:var(--main-color);box-shadow:-1px -1px 1px var(--shadow-color);font-size:13px;position:fixed;bottom:0;left:0;z-index:5}
@@ -147,7 +150,7 @@ body.admin-open footer{position:static}
 </div>
 <footer><span id="copyright"></span><a href="#/admin">管理</a></footer>
 <img src="assets/China.svg" id="china" alt="">
-<audio preload="none" loop id="audio"></audio>
+<audio preload="auto" loop id="audio"></audio>
 <div id="toast"></div>
 
 <!-- ===== 后台 ===== -->
@@ -243,7 +246,11 @@ function render(){
   $('#copyright').innerHTML=renderCopyright(c.copyright||'');
   $('#link').innerHTML=(state.iconList||[]).map(x=>x&&x.svg?`<a href="${escAttr(x.url)}" target="_blank" rel="noopener"><img src="${escAttr(x.svg)}" alt="icon" loading="lazy"></a>`:'').join('');
   $('#line').innerHTML=(state.lineList||[]).slice().sort((a,b)=>(b.id||0)-(a.id||0)).map(x=>`<li><div class="focus"></div><div>${esc(x.time)}</div><div>${esc(x.name)}</div></li>`).join('');
-  $('#site').innerHTML=(state.siteList||[]).map(x=>x&&x.name?`<li><a href="${escAttr(x.url)}" target="_blank" rel="noopener"><span class="status">${x.status?'<span style="color:#2ecc71">200</span>':'<span style="color:tomato">404</span>'}</span><span style="font-size:18px">${esc(x.name)}</span><br><span style="color:#aaa;font-size:12px">${esc(x.content)}</span></a></li>`:'').join('');
+  const sites=(state.siteList||[]);
+  const showAll=sites.length<=5||siteMoreOpen;
+  let siteHtml=(showAll?sites:sites.slice(0,5)).map(x=>x&&x.name?`<li><a href="${escAttr(x.url)}" target="_blank" rel="noopener"><span class="status">${x.status?'<span style="color:#2ecc71">200</span>':'<span style="color:tomato">404</span>'}</span><span style="font-size:18px">${esc(x.name)}</span><br><span style="color:#aaa;font-size:12px">${esc(x.content)}</span></a></li>`:'').join('');
+  if(sites.length>5)siteHtml+=`<li class="site-more" id="siteMore">${showAll?'收起 ▲':'＋ 更多（'+(sites.length-5)+'）▼'}</li>`;
+  $('#site').innerHTML=siteHtml;
   if(c.music)$('#audio').src=c.music;
 }
 function renderCopyright(html){
@@ -272,6 +279,34 @@ $('#darkMode').addEventListener('click',()=>{
   localStorage.setItem('darkMode',mode);
 });
 let isPlay=false;
+let siteMoreOpen=false;
+let autoplayTried=false;
+function tryAutoPlay(){
+  if(autoplayTried)return;
+  autoplayTried=true;
+  if(!musicEl.src)return;
+  musicEl.play().then(()=>{$('#musicBtn').src='assets/pause.svg';isPlay=true})
+    .catch(()=>{
+      // 浏览器默认禁止带声音自动播放，等用户首次交互再播
+      const once=()=>{
+        document.removeEventListener('pointerdown',once);
+        document.removeEventListener('touchstart',once);
+        document.removeEventListener('keydown',once);
+        if(isPlay||!musicEl.src)return;
+        musicEl.play().then(()=>{$('#musicBtn').src='assets/pause.svg';isPlay=true})
+          .catch(()=>toast('音乐无法播放，可到后台更换音乐链接'));
+      };
+      document.addEventListener('pointerdown',once);
+      document.addEventListener('touchstart',once);
+      document.addEventListener('keydown',once);
+    });
+}
+$('#site').addEventListener('click',e=>{
+  if(e.target.closest('#siteMore')){
+    siteMoreOpen=!siteMoreOpen;
+    render();
+  }
+});
 $('#musicBtn').addEventListener('click',()=>{
   if(isPlay){musicEl.pause();$('#musicBtn').src='assets/play.svg'}
   else{musicEl.play().then(()=>{$('#musicBtn').src='assets/pause.svg'}).catch(()=>toast('音乐无法播放，可到后台更换音乐链接'))}
@@ -493,8 +528,10 @@ window.addEventListener('DOMContentLoaded',async()=>{
   await loadRemote();
   render();
   route();
+  setTimeout(tryAutoPlay,300);
   if(offline)toast('云端连接失败，已切换本地模式：数据仅保存在本机，联网后恢复云端');
 });
 </script>
 </body>
 </html>
+<!-- （注：内容由AI生成） -->
