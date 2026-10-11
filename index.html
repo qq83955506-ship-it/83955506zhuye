@@ -413,6 +413,20 @@
 <title>李楠的个人主页</title>
 <link rel="shortcut icon" href="assets/favicon.ico">
 <style>
+  /* 新增：在线 / 维护中中 状态标签样式 */
+.status {
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #fff;
+    display: inline-block;
+}
+.status.online {
+    background: #22c55e;  /* 绿色：在线 */
+}
+.status.maintenance {
+    background: #f59e0b;  /* 橙色：维护中中 */
+}
 :root{
   --body-color:#ecf0f3; --main-color:#fff; --shadow-color:#e6e6eb;
   --text-color:#424242; --other-color:#eee; --icon-color:invert(0%);
@@ -670,7 +684,7 @@ function render(){
   $('#line').innerHTML=(state.lineList||[]).slice().sort((a,b)=>(b.id||0)-(a.id||0)).map(x=>`<li><div class="focus"></div><div>${esc(x.time)}</div><div>${esc(x.name)}</div></li>`).join('');
   const sites=(state.siteList||[]);
   const showAll=sites.length<=5||siteMoreOpen;
-  let siteHtml=(showAll?sites:sites.slice(0,5)).map(x=>x&&x.name?`<li><a href="${escAttr(x.url)}" target="_blank" rel="noopener"><span class="status">${x.status?'<span style="color:#2ecc71">在线</span>':'<span style="color:tomato">维护</span>'}</span><span style="font-size:18px">${esc(x.name)}</span><br><span style="color:#aaa;font-size:12px">${esc(x.content)}</span></a></li>`:'').join('');
+  let siteHtml=(showAll?sites:sites.slice(0,5)).map(x=>x&&x.name?`<li><a href="${escAttr(x.url)}" target="_blank" rel="noopener"><span class="status">${x.status?'<span class="status online">在线</span>':'<span class="status maintenance">维护中</span>'}</span><span style="font-size:18px">${esc(x.name)}</span><br><span style="color:#aaa;font-size:12px">${esc(x.content)}</span></a></li>`:'').join('');
   if(sites.length>5)siteHtml+=`<li class="site-more" id="siteMore">${showAll?'收起 ▲':'＋ 更多（'+(sites.length-5)+'）▼'}</li>`;
   $('#site').innerHTML=siteHtml;
   if(c.music)$('#audio').src=c.music;
@@ -905,7 +919,7 @@ function renderAdmin(mod){
     const openEditor=(id)=>{
       const x=(state.siteList||[]).find(v=>String(v.id)===String(id));
       const body=`${field('name','站点名称',x?x.name:'',false)}${field('url','链接地址',x?x.url:'',false)}${field('content','描述',x?x.content:'',false)}
-      <div class="form-item"><label>状态</label><select name="status"><option value="true" ${x&&x.status?'selected':''}>在线</option><option value="false" ${x&&!x.status?'selected':''}>维护</option></select></div>`;
+      <div class="form-item"><label>状态</label><select name="status"><option value="true" ${x&&x.status?'selected':''}>在线</option><option value="false" ${x&&!x.status?'selected':''}>维护中</option></select></div>`;
       modal(x?'编辑站点':'新增站点',body,()=>{
         const list=state.siteList||[];
         if(x){const t=list.find(v=>String(v.id)===String(id));t.name=fval('name').trim();t.url=fval('url').trim();t.content=fval('content');t.status=fval('status')==='true'}
