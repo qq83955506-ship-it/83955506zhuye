@@ -236,6 +236,176 @@
             -webkit-transform: rotate(-10deg)
         }
     }
+
+
+
+
+  /* ========== 移动端自适应 ========== */
+@media screen and (max-width: 768px) {
+    /* 缩小灯笼整体尺寸 */
+    .deng,
+    .deng-box1 .deng,
+    .deng-box3 .deng {
+        width: 70px;
+        height: 55px;
+        margin: 30px;
+        -webkit-transform-origin: 50% -60px;
+    }
+
+    /* 灯笼内部结构等比缩小 */
+    .deng-a {
+        width: 58px;
+        height: 55px;
+        margin: 8px 4px 4px 4px;
+        border-width: 1px;
+    }
+
+    .deng-b {
+        width: 26px;
+        height: 55px;
+        margin: -3px 4px 4px 15px;
+        border-width: 1px;
+    }
+
+    /* 悬挂线位置调整 */
+    .xian {
+        top: -14px;
+        left: 34px;
+        height: 14px;
+        width: 1px;
+    }
+
+    /* 穗子缩小 */
+    .shui-a {
+        width: 4px;
+        height: 14px;
+        margin: -3px 0 0 33px;
+        -webkit-transform-origin: 50% -30px;
+    }
+
+    .shui-b {
+        top: 10px;
+        left: -2px;
+        width: 8px;
+        height: 8px;
+    }
+
+    .shui-c {
+        top: 13px;
+        left: -2px;
+        width: 8px;
+        height: 22px;
+    }
+
+    /* 灯笼顶部/底部装饰条 */
+    .deng:before {
+        top: -5px;
+        left: 17px;
+        height: 8px;
+        width: 34px;
+    }
+
+    .deng:after {
+        bottom: -5px;
+        left: 6px;
+        height: 8px;
+        width: 34px;
+        margin-left: 12px;
+    }
+
+    /* 文字大小调整 */
+    .deng-t {
+        font-size: 1.8rem;
+        line-height: 52px;
+    }
+
+    /* 四个灯笼的位置重新分布，避免重叠 */
+    .deng-box3 {   /* 左10px */
+        top: -20px;
+        left: 0;
+    }
+    .deng-box2 {   /* 左150px */
+        top: -25px;
+        left: 25vw;
+    }
+    .deng-box1 {   /* 右10px */
+        top: -20px;
+        right: 0;
+        left: auto;
+    }
+    .deng-box {    /* 右150px */
+        top: -25px;
+        right: 25vw;
+        left: auto;
+    }
+}
+
+/* 超小屏幕（如 iPhone SE 等）进一步缩小 */
+@media screen and (max-width: 380px) {
+    .deng,
+    .deng-box1 .deng,
+    .deng-box3 .deng {
+        width: 55px;
+        height: 44px;
+        margin: 22px;
+        -webkit-transform-origin: 50% -50px;
+    }
+
+    .deng-a {
+        width: 45px;
+        height: 44px;
+        margin: 7px 3px 3px 3px;
+    }
+
+    .deng-b {
+        width: 20px;
+        height: 44px;
+        margin: -3px 3px 3px 12px;
+    }
+
+    .xian {
+        top: -12px;
+        left: 27px;
+        height: 12px;
+    }
+
+    .shui-a {
+        margin: -3px 0 0 26px;
+        height: 12px;
+        width: 3px;
+    }
+
+    .shui-c {
+        height: 18px;
+        width: 6px;
+    }
+
+    .shui-b {
+        width: 6px;
+        height: 6px;
+    }
+
+    .deng:before {
+        left: 13px;
+        width: 28px;
+        height: 7px;
+    }
+
+    .deng:after {
+        left: 4px;
+        width: 28px;
+        height: 7px;
+        margin-left: 10px;
+    }
+
+    .deng-t {
+        font-size: 1.4rem;
+        line-height: 42px;
+    }
+
+    .deng-box2 { left: 22vw; }
+    .deng-box  { right: 22vw; }
+}
 </style>
 
 <head>
