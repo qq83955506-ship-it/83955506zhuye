@@ -32,9 +32,10 @@ nav img{width:22px;filter:var(--icon-color);cursor:pointer}
 main{width:350px;height:440px;max-width:85%;margin-bottom:50px;position:relative;background-color:var(--main-color);box-shadow:1px 1px 1px 1px var(--shadow-color);scroll-snap-type:x mandatory;display:flex;overflow:auto}
 main::-webkit-scrollbar,#site::-webkit-scrollbar{display:none}
 section{width:100%;padding:15px;display:flex;flex-shrink:0;flex-direction:column;align-items:center;scroll-snap-align:center;scroll-snap-stop:always;overflow:auto}
-#bg{width:100%;height:50%;background-color:var(--body-color);object-fit:cover;border-radius:8px}
-.avatar{width:90px;height:90px;border-radius:50%;position:absolute;top:42%;left:50%;transform:translateX(-50%);object-fit:cover;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15)}
-.info{width:100%;flex-grow:1;display:flex;flex-direction:column;justify-content:center;align-items:center;color:var(--text-color);padding-top:30px}
+.home-head{width:100%;position:relative;flex-shrink:0;background-color:var(--body-color);border-radius:8px}
+#bg{width:100%;height:110px;object-fit:cover;border-radius:8px;display:block}
+.avatar{width:84px;height:84px;border-radius:50%;position:absolute;top:calc(100% - 42px);left:50%;transform:translateX(-50%);object-fit:cover;cursor:pointer;border:3px solid var(--main-color);box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.info{width:100%;flex-grow:1;display:flex;flex-direction:column;justify-content:center;align-items:center;color:var(--text-color);padding:50px 0 10px}
 .info h2{font-size:22px;margin-bottom:4px}
 .info h4{font-size:13px;font-weight:400;color:#aaa}
 #link{width:100%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;padding:8px 4px 0}
@@ -109,6 +110,13 @@ body.admin-open footer{position:static}
 .modal-card h3{font-size:15px;margin-bottom:12px}
 .modal-card .form-item input,.modal-card .form-item textarea{border-color:var(--shadow-color)}
 .modal-btns{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+/* 倒计时版块：与菜单栏/信息栏同款框 */
+#countBox{width:100%;background-color:var(--main-color);box-shadow:1px 1px 1px 1px var(--shadow-color);padding:10px;margin-top:6px;text-align:center;color:var(--text-color);flex-shrink:0}
+.count-date{font-size:13px;font-weight:600;margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#countBox ul{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+#countBox li{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:8px 4px;border-radius:6px;background:var(--body-color);min-width:0}
+#countBox li .cd-name{color:#aaa;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+#countBox li .cd-days{color:var(--accent);font-weight:700;font-size:14px;white-space:nowrap}
 @media (max-width:420px){
   nav,main{max-width:92%}
   .stat-grid{grid-template-columns:repeat(3,1fr)}
@@ -128,12 +136,15 @@ body.admin-open footer{position:static}
   </nav>
   <main id="mainBox" class="scrollbar">
     <section title="home">
-      <img src="" id="bg" alt="背景">
-      <img src="" class="avatar" id="avatar" alt="avatar">
+      <div class="home-head">
+        <img src="" id="bg" alt="背景">
+        <img src="" class="avatar" id="avatar" alt="avatar">
+      </div>
       <div class="info">
         <h2 id="t1"></h2>
         <h4 id="t2"></h4>
         <div id="link"></div>
+        <div id="countBox" style="display:none"></div>
       </div>
     </section>
     <section title="about">
@@ -176,6 +187,7 @@ body.admin-open footer{position:static}
       <a href="#/admin/zd" data-mod="zd">站点管理</a>
       <a href="#/admin/lc" data-mod="lc">历程管理</a>
       <a href="#/admin/svg" data-mod="svg">图标管理</a>
+      <a href="#/admin/countdown" data-mod="countdown">倒计时</a>
       <a href="#/admin/account" data-mod="account">账号</a>
     </div>
     <div id="adminBody"></div>
@@ -252,6 +264,45 @@ function render(){
   if(sites.length>5)siteHtml+=`<li class="site-more" id="siteMore">${showAll?'收起 ▲':'＋ 更多（'+(sites.length-5)+'）▼'}</li>`;
   $('#site').innerHTML=siteHtml;
   if(c.music)$('#audio').src=c.music;
+  applyBodyBg(c.bodyBg);
+  buildCountBox();
+}
+function applyBodyBg(v){
+  const b=String(v||'').trim();
+  const body=document.body;
+  if(!b){body.style.background='';return}
+  if(/^(#|rgb|hsl|rgba|hsla)/i.test(b))body.style.background=b;
+  else body.style.background='url("'+escAttr(b)+'") center / cover no-repeat fixed';
+}
+function parseDate(s){
+  const m=String(s).match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  return m?new Date(+m[1],+m[2]-1,+m[3]):new Date(s);
+}
+function buildCountBox(){
+  const box=$('#countBox');
+  if(!box)return;
+  const now=new Date();
+  const y=now.getFullYear();
+  const counts=(state.countList&&state.countList.length)?state.countList:[{name:'元旦',date:(y+1)+'-01-01'},{name:'春节',date:(y+1)+'-02-17'}];
+  const valid=counts.filter(x=>x&&x.name&&x.date);
+  if(!valid.length){box.style.display='none';box.innerHTML='';return}
+  const week=['日','一','二','三','四','五','六'][now.getDay()];
+  let html='<div class="count-date">今天是 '+y+' 年 '+(now.getMonth()+1)+' 月 '+now.getDate()+' 日（星期'+week+'）</div><ul>';
+  const today=new Date(y,now.getMonth(),now.getDate()).getTime();
+  valid.forEach(x=>{
+    const d=parseDate(x.date);
+    if(isNaN(d.getTime()))return;
+    const target=new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime();
+    const days=Math.round((target-today)/86400000);
+    let daysTxt;
+    if(days===0)daysTxt='就是今天 🎉';
+    else if(days>0)daysTxt='还有 '+days+' 天';
+    else daysTxt='已过 '+(-days)+' 天';
+    html+='<li><div class="cd-name">距离 '+esc(x.name)+'</div><div class="cd-days">'+daysTxt+'</div></li>';
+  });
+  html+='</ul>';
+  box.innerHTML=html;
+  box.style.display='';
 }
 function renderCopyright(html){
   let days='';
@@ -423,6 +474,7 @@ function renderAdmin(mod){
     <div class="form-item"><label>首页副标题 title2</label><input id="g_title2" value="${escAttr(c.title2||'')}"></div>
     <div class="form-item"><label>标签 tag（可多行）</label><textarea id="g_tag">${esc(c.tag||'')}</textarea></div>
     <div class="form-item"><label>背景图 bj（URL 或 assets/bg.jpg）</label><input id="g_bj" value="${escAttr(c.bj||'')}"></div>
+    <div class="form-item"><label>整体背景 bodyBg（填颜色如 #ecf0f3 / #343434，或图片 URL，留空为默认灰底）</label><input id="g_bodyBg" value="${escAttr(c.bodyBg||'')}"></div>
     <div class="form-item"><label>背景音乐 music（URL 或 assets/music.mp3）</label><input id="g_music" value="${escAttr(c.music||'')}"></div>
     <div class="form-item"><label>关于 infor（HTML）</label><textarea id="g_infor" class="rich-input">${esc(c.infor||'')}</textarea></div>
     <div class="form-item"><label>关于下方 inforxf（HTML）</label><textarea id="g_inforxf" class="rich-input">${esc(c.inforxf||'')}</textarea></div>
@@ -431,6 +483,7 @@ function renderAdmin(mod){
       const c=state.config;
       c.title1=$('#g_title1').value.trim();c.title2=$('#g_title2').value.trim();
       c.tag=$('#g_tag').value;c.bj=$('#g_bj').value.trim();
+      c.bodyBg=$('#g_bodyBg').value.trim();
       c.music=$('#g_music').value.trim();c.infor=$('#g_infor').value;c.inforxf=$('#g_inforxf').value;
       save();toast('已保存');
     });
@@ -502,6 +555,28 @@ function renderAdmin(mod){
       const ed=e.target.closest('[data-edit]'),dl=e.target.closest('[data-del]');
       if(ed)openEditor(ed.dataset.edit);
       if(dl)modal('删除图标','确定删除该图标？',()=>{state.iconList=(state.iconList||[]).filter(v=>String(v.id)!==String(dl.dataset.del));save();renderAdmin('svg')});
+    });
+    return;
+  }
+  if(mod==='countdown'){
+    b.innerHTML=`<button class="btn" id="addCd" style="width:100%;margin-bottom:10px">+ 新增倒计时</button>
+    <div id="cdList">${(state.countList||[]).map(x=>`<div class="list-row"><div class="info"><b>${esc(x.name)}</b><span>${esc(x.date)}</span></div><div class="ops"><button class="btn ghost sm" data-edit="${x.id}">编辑</button><button class="btn danger sm" data-del="${x.id}">删除</button></div></div>`).join('')||'<div class="empty">暂无倒计时（默认显示元旦、春节）</div>'}</div>
+    <div style="font-size:12px;color:#aaa;margin-top:10px">日期格式：YYYY-MM-DD（如 2027-01-01）。前台首页会自动计算“距离 XX 还有几天”，空列表时默认显示元旦、春节。</div>`;
+    const openEditor=(id)=>{
+      const x=(state.countList||[]).find(v=>String(v.id)===String(id));
+      const body=`${field('name','节日/事项名称',x?x.name:'',false)}${field('date','日期（YYYY-MM-DD）',x?x.date:'',false)}`;
+      modal(x?'编辑倒计时':'新增倒计时',body,()=>{
+        const list=state.countList||[];
+        if(x){const t=list.find(v=>String(v.id)===String(id));t.name=fval('name').trim();t.date=fval('date').trim()}
+        else{list.push({id:Date.now(),name:fval('name').trim(),date:fval('date').trim()});state.countList=list}
+        save();renderAdmin('countdown');
+      });
+    };
+    $('#addCd').addEventListener('click',()=>openEditor(null));
+    $('#cdList').addEventListener('click',e=>{
+      const ed=e.target.closest('[data-edit]'),dl=e.target.closest('[data-del]');
+      if(ed)openEditor(ed.dataset.edit);
+      if(dl)modal('删除倒计时','确定删除该条倒计时？',()=>{state.countList=(state.countList||[]).filter(v=>String(v.id)!==String(dl.dataset.del));save();renderAdmin('countdown')});
     });
     return;
   }
