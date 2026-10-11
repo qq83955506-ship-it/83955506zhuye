@@ -33,11 +33,11 @@ main{width:350px;height:440px;max-width:85%;margin-bottom:50px;position:relative
 main::-webkit-scrollbar,#site::-webkit-scrollbar,section::-webkit-scrollbar{display:none}
 main,#site,section{scrollbar-width:none;-ms-overflow-style:none}
 section{width:100%;padding:15px;display:flex;flex-shrink:0;flex-direction:column;align-items:center;scroll-snap-align:center;scroll-snap-stop:always;overflow:auto}
-#secHome{padding:8px 15px 10px}
-.home-head{width:100%;position:relative;flex-shrink:0;background-color:var(--body-color);border-radius:8px}
-#bg{width:100%;height:44%;object-fit:cover;border-radius:8px;display:block}
-.avatar{width:84px;height:84px;border-radius:50%;position:absolute;top:calc(100% - 42px);left:50%;transform:translateX(-50%);object-fit:cover;cursor:pointer;border:3px solid var(--main-color);box-shadow:0 2px 8px rgba(0,0,0,.15)}
-.info{width:100%;flex-grow:1;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;color:var(--text-color);padding:42px 0 6px}
+#secHome{padding:8px 15px 8px}
+.home-head{width:100%;height:50%;position:relative;flex-shrink:0;background-color:var(--body-color);border-radius:8px}
+#bg{width:100%;height:100%;object-fit:cover;border-radius:8px;display:block}
+.avatar{width:84px;height:84px;border-radius:50%;position:absolute;top:calc(100% - 40px);left:50%;transform:translateX(-50%);object-fit:cover;cursor:pointer;border:3px solid var(--main-color);box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.info{width:100%;flex-grow:1;display:flex;flex-direction:column;justify-content:center;align-items:center;color:var(--text-color);padding:44px 0 8px}
 .info h2{font-size:22px;margin-bottom:2px}
 .info h4{font-size:12px;font-weight:400;color:#aaa}
 #link{width:100%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;padding:8px 4px 0}
@@ -113,7 +113,7 @@ body.admin-open footer{position:static}
 .modal-card .form-item input,.modal-card .form-item textarea{border-color:var(--shadow-color)}
 .modal-btns{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
 /* 倒计时版块：与菜单栏/信息栏同款框 */
-#countBox{width:100%;background-color:var(--main-color);box-shadow:1px 1px 1px 1px var(--shadow-color);padding:8px;margin-top:auto;text-align:center;color:var(--text-color);flex-shrink:0}
+#countBox{width:350px;max-width:85%;background-color:var(--main-color);box-shadow:1px 1px 1px 1px var(--shadow-color);padding:10px;text-align:center;color:var(--text-color);margin:0 auto 70px}
 .count-date{font-size:12px;font-weight:600;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #countBox ul{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:6px;overflow:hidden}
 #countBox li{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:6px 4px;border-radius:6px;background:var(--body-color);min-width:0}
@@ -146,7 +146,6 @@ body.admin-open footer{position:static}
         <h2 id="t1"></h2>
         <h4 id="t2"></h4>
         <div id="link"></div>
-        <div id="countBox" style="display:none"></div>
       </div>
     </section>
     <section title="about">
@@ -160,6 +159,7 @@ body.admin-open footer{position:static}
     </section>
     <section title="website"><ul id="site"></ul></section>
   </main>
+  <div id="countBox" style="display:none"></div>
 </div>
 <footer><span id="copyright"></span><a href="#/admin">管理</a></footer>
 <img src="assets/China.svg" id="china" alt="">
