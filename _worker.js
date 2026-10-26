@@ -27,6 +27,11 @@ function randomToken() {
 }
 
 async function getState(env) {
+  // The original Workers site stores all homepage data in one KV key: "state".
+  const saved = await env.KV.get('state', 'json');
+  if (saved && typeof saved === 'object' && !Array.isArray(saved)) return saved;
+
+  // Backward compatibility for namespaces that used separate keys.
   const entries = await Promise.all(KEYS.map(async key => [key, await env.KV.get(key, 'json')]));
   const data = {};
   for (const [key, value] of entries) {
@@ -36,11 +41,8 @@ async function getState(env) {
 }
 
 async function saveState(env, data) {
-  for (const key of KEYS) {
-    if (Object.prototype.hasOwnProperty.call(data, key)) {
-      await env.KV.put(key, JSON.stringify(data[key]));
-    }
-  }
+  // Keep the original storage format so the existing homepage data remains intact.
+  await env.KV.put('state', JSON.stringify(data));
 }
 
 async function requireSession(request, env) {
