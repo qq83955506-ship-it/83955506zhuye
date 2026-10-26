@@ -57,22 +57,22 @@ async function requireSession(request, env) {
 }
 
 async function homepage(request, env) {
-  const u = new URL(request.url);
-  const assetUrl = new URL('/index.html', u);
-  const assetRequest = new Request(assetUrl.toString(), request);
-  const r = await env.ASSETS.fetch(assetRequest);
+  // Fetch the current route from the Pages asset binding.
+  // Do not rewrite "/" to "/index.html": that can trigger a redirect loop.
+  const r = await env.ASSETS.fetch(request);
   if (!r.ok) return r;
 
-  let html = await r.text();
-  html = html.replaceAll('https://workers.83955506.xyz', u.origin);
+  const contentType = r.headers.get('Content-Type') || '';
+  if (!contentType.includes('text/html')) return r;
 
-  return new Response(html, {
-    status: r.status,
-    headers: {
-      'Content-Type': 'text/html; charset=UTF-8',
-      'Cache-Control': 'public, max-age=300',
-    },
-  });
+  let html = await r.text();
+  html = html.replaceAll('https://workers.83955506.xyz', new URL(request.url).origin);
+
+  const headers = new Headers(r.headers);
+  headers.set('Content-Type', 'text/html; charset=UTF-8');
+  headers.set('Cache-Control', 'public, max-age=300');
+
+  return new Response(html, { status: r.status, headers });
 }
 
 export default {
